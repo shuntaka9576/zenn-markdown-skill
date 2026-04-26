@@ -1,0 +1,72 @@
+{
+  "skill_name": "zenn-markdown",
+  "evals": [
+    {
+      "id": 1,
+      "name": "convert-github-alerts-to-zenn-message",
+      "prompt": "@evals/fixtures/with-gh-alerts.md zenn記法で",
+      "files": ["fixtures/with-gh-alerts.md"],
+      "assertions": [
+        "出力ファイル output.md が存在する",
+        "frontmatter ブロック (--- で囲まれた YAML) が原文と完全一致している",
+        "GitHub Alerts の記法 (> [!NOTE], > [!TIP], > [!IMPORTANT], > [!WARNING], > [!CAUTION]) が出力に1つも残っていない",
+        ":::message ブロックが少なくとも1つ存在する",
+        ":::message alert ブロックが少なくとも1つ存在する",
+        "コードブロック内の YAML サンプル (id-token: write など) が破壊されずに保持されている",
+        "リンク https://docs.github.com/... の段落周辺が改変されておらず、リンクカードとしてレンダリングされる単独行のままである"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "memo-draft-to-zenn-article",
+      "prompt": "@evals/fixtures/memo-draft.md zenn記法で",
+      "files": ["fixtures/memo-draft.md"],
+      "assertions": [
+        "出力ファイル output.md が存在する",
+        "「注意:」「警告:」「Tips:」で始まる段落が :::message または :::message alert に変換されている",
+        "「警告:」(ollama serve のセキュリティ注意) は :::message alert になっている",
+        "speakerdeck の URL が単独行で保持されている、または埋め込み記法で正しく変換されている",
+        "YouTube の URL が単独行で保持されている",
+        "GitHub の URL (ollama README) が単独行で保持されている",
+        "長いデバッグ手順の段落が :::details で折り畳まれている",
+        "コードブロックの中身が破壊されていない",
+        "TODO コメントが残されているか、ユーザーへの確認として明示されている"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "new-article-with-zenn-affordances",
+      "prompt": "Rust の tokio と async-std を比較する記事を Zenn に書きたい。",
+      "files": [],
+      "assertions": [
+        "出力ファイル output.md が存在する",
+        "frontmatter (--- で囲まれた YAML) が生成されていない (skill は frontmatter を対象外と判断する)",
+        "本文の見出しが ## から始まる (# H1 を本文に置かない Zenn 慣習)",
+        ":::details で折り畳まれた補足/前提知識セクションが少なくとも1つある",
+        ":::message または :::message alert で囲まれた注意点が少なくとも1つある",
+        "ファイル名付きコードブロック (```rust:path/to/file.rs の形式) が少なくとも1つある",
+        "tokio と async-std の両方に言及があり、内容が比較記事になっている"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "convert-inline-embeds-to-zenn-syntax",
+      "prompt": "@evals/fixtures/embeds-mixed.md zenn記法で",
+      "files": ["fixtures/embeds-mixed.md"],
+      "assertions": [
+        "出力ファイル output.md が存在する",
+        "SpeakerDeck (introduction-to-mcp) が @[speakerdeck](4d38ba718577441bb8c97392c3cdb0cd) に変換されている",
+        "SpeakerDeck (lets-manage-claude-code-with-dotfiles) が @[speakerdeck](fd95bf350478469787c5eb00373e82cd) に変換されている",
+        "CodePen の URL が @[codepen](url) で変換されているか、単独行に切り出されている",
+        "JSFiddle の URL が @[jsfiddle](url) で変換されているか、単独行に切り出されている",
+        "StackBlitz の URL が @[stackblitz](url) で変換されているか、単独行に切り出されている",
+        "Figma の URL が @[figma](url) で変換されているか、単独行に切り出されている",
+        "Gist の URL が @[gist](url) で変換されているか、単独行に切り出されている",
+        "YouTube の URL は単独行に切り出されている",
+        "Twitter/X の URL は単独行に切り出されている",
+        "GitHub の URL は単独行に切り出されている",
+        "本文中の自然な文脈 (登壇/MCP の説明) が保持されている"
+      ]
+    }
+  ]
+}
